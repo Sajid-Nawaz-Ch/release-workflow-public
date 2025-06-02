@@ -5,23 +5,26 @@ name: Release_Build
       - released
   workflow_dispatch:
 jobs:
-  set-version:
+  set-release-version:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Setup Java 21
+
+      - name: Set up Java 21
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 21
-      - name: Set Maven version based on release tag
+
+      - name: Set Maven version to release tag
         run: mvn versions:set -DnewVersion=${{ github.event.release.tag_name }}
-      - name: Commit version change
+
+      - name: Commit and push version change
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git commit -am "chore: set version to ${{ github.event.release.tag_name }}"
+          git commit -am "chore: set release version ${{ github.event.release.tag_name }}"
           git push origin HEAD:${{ github.ref_name }}
