@@ -4,6 +4,12 @@ on:
   release:
     types:
       - released
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release version (1.0.0)'
+        required: true
+        type: string
 
 jobs:
   create-release:
