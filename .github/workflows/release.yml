@@ -28,8 +28,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
+          git config user.name "Sajid-Nawaz-Ch"
+          git config user.email "sajid.chaudhry.extern@dvag.com"
 
       - name: Run gitflow:release-start
         run: |
