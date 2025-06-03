@@ -2,6 +2,8 @@ name: Create release
 
 on:
   workflow_dispatch:
+    branches:
+      - develop
 
 jobs:
   release:
@@ -11,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: develop
+#          ref: develop
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
