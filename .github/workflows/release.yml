@@ -71,11 +71,11 @@ jobs:
           mvn versions:commit
           git commit -am "Release version ${{ steps.versions.outputs.release_version }}"
 
-      - name: Merge release to main and tag it
+      - name: Merge release to master and tag it
         run: |
-          git checkout main
+          git checkout master
           git merge --no-ff release/${{ steps.versions.outputs.release_version }} -m "Merge release ${{
-            steps.versions.outputs.release_version }} into main"
+            steps.versions.outputs.release_version }} into master"
           git tag -a v${{ steps.versions.outputs.release_version }} -m "Release ${{ steps.versions.outputs.release_version }}"
           
       - name: Merge release back to develop
@@ -97,5 +97,5 @@ jobs:
       - name: Push all changes
         run: |
           git push origin develop
-          git push origin main
+          git push origin master
           git push origin --tags
