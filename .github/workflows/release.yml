@@ -53,11 +53,49 @@ jobs:
           echo "release_version=$release_version" >> $GITHUB_OUTPUT
           echo "development_version=$development_version" >> $GITHUB_OUTPUT      
 
-      - name: Run gitflow:release
-        run: |
-          mvn gitflow:release \
-            -DreleaseVersion=${{ steps.versions.outputs.release_version }} \
-            -DdevelopmentVersion=${{ steps.versions.outputs.development_version }} \
-            -DpushRemote=true \
-            -B
+#      - name: Run gitflow:release
+#        run: |
+#          mvn gitflow:release \
+#            -DreleaseVersion=${{ steps.versions.outputs.release_version }} \
+#            -DdevelopmentVersion=${{ steps.versions.outputs.development_version }} \
+#            -DpushRemote=true \
+#            -B
 
+      - name: Create release branch
+        run: |
+          git checkout -b release/${{ steps.versions.outputs.release_version }}
+
+      - name: Set release version in pom.xml
+        run: |
+          mvn versions:set -DnewVersion=${{ steps.versions.outputs.release_version }}
+          mvn versions:commit
+          git commit -am "Release version ${{ steps.versions.outputs.release_version }}"
+
+      - name: Merge release to main and tag it
+        run: |
+          git checkout main
+          git merge --no-ff release/${{ steps.versions.outputs.release_version }} -m "Merge release ${{
+            steps.versions.outputs.release_version }} into main"
+          git tag -a v${{ steps.versions.outputs.release_version }} -m "Release ${{ steps.versions.outputs.release_version }}"
+          
+      - name: Merge release back to develop
+        run: |
+          git checkout develop
+          git merge --no-ff release/${{ steps.versions.outputs.release_version }} -m "Merge release ${{
+            steps.versions.outputs.release_version }} back into develop"      
+
+      - name: Set next development version
+        run: |
+          mvn versions:set -DnewVersion=${{ steps.versions.outputs.development_version }}
+          mvn versions:commit
+          git commit -am "Start next development iteration ${{ steps.versions.outputs.development_version }}"
+
+      - name: Delete release branch
+        run: |
+          git branch -d release/${{ steps.versions.outputs.release_version }} 
+          
+      - name: Push all changes
+        run: |
+          git push origin develop
+          git push origin main
+          git push origin --tags
