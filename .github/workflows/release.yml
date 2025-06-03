@@ -32,6 +32,26 @@ jobs:
           git config user.name "Sajid-Nawaz-Ch"
           git config user.email "sajid.chaudhry.extern@dvag.com"
 
+      - name: Extract versions from pom.xml
+        id: versions
+        run: |
+          current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "Current version: $current_version"
+          
+          release_version=${current_version/-SNAPSHOT/}
+          echo "Release version: $release_version"
+          
+          # Calculate next minor version
+          IFS='.' read -r major minor patch <<< "${release_version}"
+          next_minor=$((minor + 1))
+          development_version="${major}.${next_minor}.0-SNAPSHOT"
+          
+          echo "Release version is $release_version"
+          echo "Next development version is $development_version"
+          
+          echo "release_version=$release_version" >> $GITHUB_OUTPUT
+          echo "development_version=$development_version" >> $GITHUB_OUTPUT      
+
       - name: Run gitflow:release-start
         run: |
           mvn gitflow:release-start \
