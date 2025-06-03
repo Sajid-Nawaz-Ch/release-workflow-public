@@ -11,6 +11,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          ref: develop
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -53,11 +54,3 @@ jobs:
             -DpushRemote=true \
             -B
 
-#      - name: Push release branch
-#        run: |
-#          git push --all
-#          git push --tags
-#
-#      - name: Run gitflow:release-finish
-#        run: |
-#          mvn gitflow:release-finish -DpushRemote=true -B
