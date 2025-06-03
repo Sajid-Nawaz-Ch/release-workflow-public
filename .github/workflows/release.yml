@@ -45,19 +45,19 @@ jobs:
           echo "release_version=$release_version" >> $GITHUB_OUTPUT
           echo "development_version=$development_version" >> $GITHUB_OUTPUT      
 
-      - name: Run gitflow:release-start
+      - name: Run gitflow:release
         run: |
-          mvn gitflow:release-start \
+          mvn gitflow:release \
             -DreleaseVersion=${{ github.event.inputs.release_version }} \
             -DdevelopmentVersion=${{ github.event.inputs.development_version }} \
             -DpushRemote=true \
             -B
 
-      - name: Push release branch
-        run: |
-          git push --all
-          git push --tags
-
-      - name: Run gitflow:release-finish
-        run: |
-          mvn gitflow:release-finish -DpushRemote=true -B
+#      - name: Push release branch
+#        run: |
+#          git push --all
+#          git push --tags
+#
+#      - name: Run gitflow:release-finish
+#        run: |
+#          mvn gitflow:release-finish -DpushRemote=true -B
