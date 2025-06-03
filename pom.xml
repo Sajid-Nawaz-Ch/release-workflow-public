@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.dvag.api</groupId>
     <artifactId>release-workflow</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <name>release-workflow</name>
     <description>release-workflow</description>
     <url/>
@@ -97,21 +97,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-           <!-- <plugin>
-                <groupId>com.amashchenko.maven.plugin</groupId>
-                <artifactId>gitflow-maven-plugin</artifactId>
-                <version>1.21.0</version>
-                <configuration>
-                    <digitsOnlyDevVersion>true</digitsOnlyDevVersion>
-                    <skipFeatureVersion>false</skipFeatureVersion>
-                    <versionsForceUpdate>true</versionsForceUpdate>
-                    <commitMessages>
-                        <featureStartMessage>Version für Feature-Branch aktualisiert</featureStartMessage>
-                        <featureFinishMessage>Version für Develop-Branch aktualisiert</featureFinishMessage>
-                    </commitMessages>
-                    <versionDigitToIncrement>2</versionDigitToIncrement>
-                </configuration>
-            </plugin>-->
         </plugins>
     </build>
 
