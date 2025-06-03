@@ -13,13 +13,13 @@ jobs:
       - name: Check if branch is develop
         if: github.ref != 'refs/heads/develop'
         run: |
-          echo "⚠️ This workflow must only be run from the 'develop' branch!"
+          echo "This workflow must only be run from the 'develop' branch!"
           exit 1
 
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-#          ref: develop
+          ref: develop
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
