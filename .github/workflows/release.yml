@@ -76,7 +76,7 @@ jobs:
           git checkout master
           git merge --no-ff release/${{ steps.versions.outputs.release_version }} -m "Merge release ${{
             steps.versions.outputs.release_version }} into master"
-          git tag -a v${{ steps.versions.outputs.release_version }} -m "Release ${{ steps.versions.outputs.release_version }}"
+          git tag -a ${{ steps.versions.outputs.release_version }} -m "Release ${{ steps.versions.outputs.release_version }}"
           
       - name: Merge release back to develop
         run: |
@@ -98,4 +98,4 @@ jobs:
         run: |
           git push origin develop
           git push origin master
-          git push origin --tags
+          git push origin ${{ steps.versions.outputs.release_version }}
