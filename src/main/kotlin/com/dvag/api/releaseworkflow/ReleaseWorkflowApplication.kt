@@ -8,5 +8,4 @@ class ReleaseWorkflowApplication
 
 fun main(args: Array<String>) {
     runApplication<ReleaseWorkflowApplication>(*args)
-    // Test new changes
 }
