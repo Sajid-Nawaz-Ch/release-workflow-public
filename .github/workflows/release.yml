@@ -76,7 +76,7 @@ jobs:
 
       - name: Run gitflow:release
         run: |
-          mvn -B -s ${{ github.workspace }}/.github/settings.xml gitflow:release \
+          mvn -B gitflow:release \
             -DreleaseVersion=${{ steps.versioning.outputs.release_version }} \
             -DdevelopmentVersion=${{ steps.versioning.outputs.next_snapshot_version }}
 
