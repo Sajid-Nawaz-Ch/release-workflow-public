@@ -63,8 +63,8 @@ jobs:
             minor=$((minor + 1))
             patch=0
           else
-            #patch=$((patch + 1))
-            patch=$((patch))
+            # batch version will be incremented automatically be the plugin
+            # patch=$((patch))
           fi
           
           release_version="${major}.${minor}.${patch}"
