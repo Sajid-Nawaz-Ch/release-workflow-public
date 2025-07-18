@@ -63,7 +63,7 @@ jobs:
             minor=$((minor + 1))
             patch=0
           else
-            #patch=$((patch + 1))
+            #batch version will be incremented automatically be the plugin
             patch=$((patch))
           fi
           
