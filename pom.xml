@@ -105,7 +105,7 @@
                     <digitsOnlyDevVersion>true</digitsOnlyDevVersion>
                     <skipFeatureVersion>false</skipFeatureVersion>
                     <versionsForceUpdate>true</versionsForceUpdate>
-                    <versionDigitToIncrement>2</versionDigitToIncrement>
+                    <versionDigitToIncrement>3</versionDigitToIncrement>
                     <gitFlowConfig>
                         <productionBranch>main</productionBranch>
                     </gitFlowConfig>
