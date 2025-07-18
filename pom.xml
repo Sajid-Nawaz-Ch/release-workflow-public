@@ -97,6 +97,20 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>1.21.0</version>
+                <configuration>
+                    <digitsOnlyDevVersion>true</digitsOnlyDevVersion>
+                    <skipFeatureVersion>false</skipFeatureVersion>
+                    <versionsForceUpdate>true</versionsForceUpdate>
+                    <versionDigitToIncrement>2</versionDigitToIncrement>
+                    <gitFlowConfig>
+                        <productionBranch>main</productionBranch>
+                    </gitFlowConfig>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
