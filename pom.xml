@@ -102,7 +102,7 @@
                 <artifactId>gitflow-maven-plugin</artifactId>
                 <version>1.21.0</version>
                 <configuration>
-                    <digitsOnlyDevVersion>true</digitsOnlyDevVersion>
+                    <digitsOnlyDevVersion>false</digitsOnlyDevVersion>
                     <skipFeatureVersion>false</skipFeatureVersion>
                     <versionsForceUpdate>true</versionsForceUpdate>
                     <versionDigitToIncrement>0</versionDigitToIncrement>
