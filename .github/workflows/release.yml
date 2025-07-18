@@ -4,10 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       release-type:
-        description: 'Optional: type of release (minor or major). Leave empty for bugfix.'
-        required: false
+        description: 'Type of release (bugfix, minor, major)'
+        required: true
+        default: 'bugfix'
         type: choice
         options:
+          - bugfix
           - minor
           - major
     branches:
