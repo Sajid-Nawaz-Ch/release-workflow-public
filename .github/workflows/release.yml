@@ -67,7 +67,7 @@ jobs:
           fi
           
           release_version="${major}.${minor}.${patch}"
-          next_snapshot_version="${major}.${minor}.$((patch + 1))-SNAPSHOT"
+          next_snapshot_version="${major}.${minor}.$((patch))-SNAPSHOT"
           
           echo "release_version=$release_version"
           echo "next_snapshot_version=$next_snapshot_version"
