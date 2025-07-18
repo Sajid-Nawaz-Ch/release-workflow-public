@@ -75,6 +75,12 @@ jobs:
           echo "release_version=$release_version" >> $GITHUB_OUTPUT
           echo "next_snapshot_version=$next_snapshot_version" >> $GITHUB_OUTPUT
 
+      - name: Run gitflow:release
+        run: |
+          mvn -B gitflow:release \
+            -DreleaseVersion=${{ steps.versioning.outputs.release_version }} \
+            -DdevelopmentVersion=${{ steps.versioning.outputs.next_snapshot_version }}
+
 #      - name: Extract versions from pom.xml
 #        id: versions
 #        run: |
