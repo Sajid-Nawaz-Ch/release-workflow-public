@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.dvag.api</groupId>
     <artifactId>release-workflow</artifactId>
-    <version>0.8.16</version>
+    <version>0.8.18</version>
     <name>release-workflow</name>
     <description>release-workflow</description>
     <url/>
@@ -105,7 +105,7 @@
                     <digitsOnlyDevVersion>false</digitsOnlyDevVersion>
                     <skipFeatureVersion>false</skipFeatureVersion>
                     <versionsForceUpdate>true</versionsForceUpdate>
-                    <versionDigitToIncrement>0</versionDigitToIncrement>
+                    <versionDigitToIncrement>-1</versionDigitToIncrement>
                     <gitFlowConfig>
                         <productionBranch>main</productionBranch>
                     </gitFlowConfig>
