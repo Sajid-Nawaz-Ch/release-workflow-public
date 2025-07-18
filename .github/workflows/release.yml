@@ -4,12 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       release-type:
-        description: 'Type of release (bugfix, minor, major)'
-        required: true
-        default: 'bugfix'
+        description: 'Optional: type of release (minor or major). Leave empty for bugfix.'
+        required: false
         type: choice
         options:
-          - bugfix
           - minor
           - major
     branches:
@@ -48,12 +46,13 @@ jobs:
         run: |
           current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "Current version: $current_version"
-
+          
           version=${current_version%-SNAPSHOT}
           IFS='.' read -r major minor patch <<< "$version"
-
+          
           release_type="${{ github.event.inputs.release-type }}"
-
+          echo "Selected release type: ${release_type:-bugfix}"
+          
           if [ "$release_type" = "major" ]; then
             major=$((major + 1))
             minor=0
@@ -64,21 +63,21 @@ jobs:
           else
             patch=$((patch + 1))
           fi
-
+          
           release_version="${major}.${minor}.${patch}"
           next_snapshot_version="${major}.${minor}.$((patch + 1))-SNAPSHOT"
-
+          
           echo "release_version=$release_version"
           echo "next_snapshot_version=$next_snapshot_version"
-
+          
           echo "release_version=$release_version" >> $GITHUB_OUTPUT
           echo "next_snapshot_version=$next_snapshot_version" >> $GITHUB_OUTPUT
-
-      - name: Run gitflow:release
-        run: |
-          mvn -B gitflow:release \
-            -DreleaseVersion=${{ steps.versioning.outputs.release_version }} \
-            -DdevelopmentVersion=${{ steps.versioning.outputs.next_snapshot_version }}
+    
+          - name: Run gitflow:release
+            run: |
+              mvn -B gitflow:release \
+                -DreleaseVersion=${{ steps.versioning.outputs.release_version }} \
+                -DdevelopmentVersion=${{ steps.versioning.outputs.next_snapshot_version }}
 
 #      - name: Extract versions from pom.xml
 #        id: versions
