@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.dvag.api</groupId>
     <artifactId>release-workflow</artifactId>
-    <version>3.1.3</version>
+    <version>3.1.4-SNAPSHOT</version>
     <name>release-workflow</name>
     <description>release-workflow</description>
     <url/>
