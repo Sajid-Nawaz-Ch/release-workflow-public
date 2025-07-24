@@ -77,74 +77,85 @@ jobs:
           echo "release_version=$release_version" >> $GITHUB_OUTPUT
           echo "next_snapshot_version=$next_snapshot_version" >> $GITHUB_OUTPUT
 
-      - name: Run gitflow:release
-        run: |
-          mvn -B gitflow:release \
-            -DreleaseVersion=${{ steps.versioning.outputs.release_version }} \
-            -DdevelopmentVersion=${{ steps.versioning.outputs.next_snapshot_version }}
+#      - name: Run gitflow:release
+#        run: |
+#          mvn -B gitflow:release \
+#            -DreleaseVersion=${{ steps.versioning.outputs.release_version }} \
+#            -DdevelopmentVersion=${{ steps.versioning.outputs.next_snapshot_version }}
 
-#      - name: Extract versions from pom.xml
-#        id: versions
-#        run: |
-#          current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-#          echo "Current version: $current_version"
-#
-#          release_version=${current_version/-SNAPSHOT/}
-#          echo "Release version: $release_version"
-#
-#          # Calculate the next minor version # bugfix verson nehmen
-#          IFS='.' read -r major minor patch <<< "${release_version}"
-#          next_minor=$((minor + 1))
-#          development_version="${major}.${next_minor}.0-SNAPSHOT"
-#
-#          echo "Release version is $release_version"
-#          echo "Next development version is $development_version"
-#
-#          echo "release_version=$release_version" >> $GITHUB_OUTPUT
-#          echo "development_version=$development_version" >> $GITHUB_OUTPUT
-#
-#      - name: Create release branch
-#        run: |
-#          git checkout -b release/${{ steps.versions.outputs.release_version }}
-#
-#      - name: Set release version in pom.xml
-#        run: |
-#          mvn versions:set -DnewVersion=${{ steps.versions.outputs.release_version }}
-#          mvn versions:commit
-#          git commit -am "Release version ${{ steps.versions.outputs.release_version }}"
-#
-#      - name: Merge release to main and tag it
-#        run: |
-#          git checkout main
-#          git merge --no-ff release/${{ steps.versions.outputs.release_version }} -m "Merge release ${{
-#            steps.versions.outputs.release_version }} into main"
-#          git tag -a ${{ steps.versions.outputs.release_version }} -m "Release ${{ steps.versions.outputs.release_version }}"
-#
-#      - name: Merge release back to develop
-#        run: |
-#          git checkout develop
-#          git merge --no-ff release/${{ steps.versions.outputs.release_version }} -m "Merge release ${{
-#            steps.versions.outputs.release_version }} back into develop"
-#
-#      - name: Set next development version
-#        run: |
-#          mvn versions:set -DnewVersion=${{ steps.versions.outputs.development_version }}
-#          mvn versions:commit
-#          git commit -am "Start next development iteration ${{ steps.versions.outputs.development_version }}"
-#
-#                - name: Set next development version
-#        run: |
-#          mvn --file pom.xml -s ${{ github.workspace }}/.github/settings.xml versions:set -DnewVersion=${{ steps.versions.outputs.development_version }}
-#          mvn --file pom.xml -s ${{ github.workspace }}/.github/settings.xml versions:commit
-#          git commit -am "Start next development iteration ${{ steps.versions.outputs.development_version }}"
-#
-#
-#      - name: Delete release branch
-#        run: |
-#          git branch -d release/${{ steps.versions.outputs.release_version }}
-#
-#      - name: Push all changes
-#        run: |
-#          git push origin develop
-#          git push origin main
-#          git push origin ${{ steps.versions.outputs.release_version }}
+      - name: Extract versions from pom.xml
+        id: versions
+        run: |
+          current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "Current version: $current_version"
+          
+          release_type="${{ github.event.inputs.release-type }}"
+          echo "Selected release type: $release_type"
+
+          if [ "$release_type" = "major" ]; then
+            major=$((major + 1))
+            minor=0
+            patch=0
+          elif [ "$release_type" = "minor" ]; then
+            minor=$((minor + 1))
+            patch=0
+          else
+            #batch version will be incremented automatically be the plugin
+            patch=$((patch))
+          fi
+          
+          release_version="${major}.${minor}.${patch}"
+          next_patch=$((patch + 1))
+          next_snapshot_version="${major}.${minor}.$((next_patch))-SNAPSHOT"
+          
+          echo "release_version=$release_version"
+          echo "next_snapshot_version=$next_snapshot_version"
+          
+          echo "release_version=$release_version" >> $GITHUB_OUTPUT
+          echo "next_snapshot_version=$next_snapshot_version" >> $GITHUB_OUTPUT
+
+      - name: Create release branch
+        run: |
+          git checkout -b release/${{ steps.versions.outputs.release_version }}
+
+      - name: Set release version in pom.xml
+        run: |
+          mvn versions:set -DnewVersion=${{ steps.versions.outputs.release_version }}
+          mvn versions:commit
+          git commit -am "Release version ${{ steps.versions.outputs.release_version }}"
+
+      - name: Merge release to main and tag it
+        run: |
+          git checkout main
+          git merge --no-ff release/${{ steps.versions.outputs.release_version }} -m "Merge release ${{
+            steps.versions.outputs.release_version }} into main"
+          git tag -a ${{ steps.versions.outputs.release_version }} -m "Release ${{ steps.versions.outputs.release_version }}"
+
+      - name: Merge release back to develop
+        run: |
+          git checkout develop
+          git merge --no-ff release/${{ steps.versions.outputs.release_version }} -m "Merge release ${{
+            steps.versions.outputs.release_version }} back into develop"
+
+      - name: Set next development version
+        run: |
+          mvn versions:set -DnewVersion=${{ steps.versions.outputs.development_version }}
+          mvn versions:commit
+          git commit -am "Start next development iteration ${{ steps.versions.outputs.development_version }}"
+
+      - name: Set next development version
+        run: |
+          mvn --file pom.xml -s ${{ github.workspace }}/.github/settings.xml versions:set -DnewVersion=${{ steps.versions.outputs.development_version }}
+          mvn --file pom.xml -s ${{ github.workspace }}/.github/settings.xml versions:commit
+          git commit -am "Start next development iteration ${{ steps.versions.outputs.development_version }}"
+
+
+      - name: Delete release branch
+        run: |
+          git branch -d release/${{ steps.versions.outputs.release_version }}
+
+      - name: Push all changes
+        run: |
+          git push origin develop
+          git push origin main
+          git push origin ${{ steps.versions.outputs.release_version }}
